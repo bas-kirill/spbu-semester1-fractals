@@ -2,6 +2,7 @@
 #include <string>
 #include <cmath>
 #include <stack>
+#include <iostream>
 
 // system settings
 const int WIDTH = 1600, HEIGHT = 900;
@@ -158,7 +159,7 @@ private:
     int width, height;
     bool isFocus;
 
-    void setFont() {font.loadFromFile("arial.ttf"); }
+    void setFont() { font.loadFromFile("./fonts/arial.ttf"); }
 public:
     TextButton(const std::string& _text, sf::Color color, int characterSize, float _x, float _y, int _width, int _height) {
         setFont();
@@ -237,7 +238,7 @@ private:
     int width, height;
     bool isFocus;
 
-    void setFont() {font.loadFromFile("arial.ttf"); }
+    void setFont() { font.loadFromFile("./fonts/arial.ttf"); }
 public:
     TextField(const std::string& _text, sf::Color color, int characterSize, float _x, float _y, int _width, int _height) {
         setFont();
@@ -580,7 +581,6 @@ int main() {
     sf::View view = app.getDefaultView();
 
     std::pair<std::string, int> robotNameAndGensNumber = menu(app);
-
     std::string robotName = robotNameAndGensNumber.first;
     int gensNumber = robotNameAndGensNumber.second;
 
@@ -590,10 +590,20 @@ int main() {
 
     makeFigure(figure, LSystem, robot, robotName, gensNumber);
 
+    sf::Texture loupeTexture;
+    loupeTexture.loadFromFile("./img/loupe.png");
+    sf::Sprite loupeSprite;
+    loupeSprite.setTexture(loupeTexture);
+    loupeSprite.setPosition(WIDTH - 200, 100);
+
+    sf::CircleShape circle(50);
+    circle.setFillColor(sf::Color(100, 250, 50));
+
     sf::Vector2f oldPos = sf::Vector2f(0, 0);
     bool moving = false;
     bool after_menu = false;
     float zoom = 1;
+    bool isLoupe = false;
     while(app.isOpen()){
         sf::Event event;
         while(app.pollEvent(event)) {
@@ -652,10 +662,13 @@ int main() {
                         zoom = std::min(2.f, zoom + 0.1f);
                     }
 
+                    isLoupe = true;
+
                     view.setSize(app.getDefaultView().getSize());
                     view.zoom(zoom);
 
                     app.setView(view);
+
 
                     break;
                 }
@@ -663,8 +676,14 @@ int main() {
         }
 
         app.clear(sf::Color::Black);
+
         app.draw(figure);
 
+        // TO DO
+        if (isLoupe) {
+            isLoupe = false;
+            app.draw(loupeSprite);
+        }
         app.display();
     }
 
