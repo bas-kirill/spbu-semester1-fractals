@@ -8,14 +8,14 @@ const int WIDTH = 1600, HEIGHT = 900;
 const double PI = acos(-1);
 const int step = 3;
 
-class L_System {
+class LSystem {
 private:
     std::string axiom;
     char chr1, chr2;
     std::string rule1, rule2;
     int angle, gens;
 public:
-    L_System(std::string _axiom, char _chr1, char _chr2, std::string _rule1, std::string _rule2,
+    LSystem(std::string _axiom, char _chr1, char _chr2, std::string _rule1, std::string _rule2,
              int _angle, int _gens) {
         axiom = _axiom;
         chr1 = _chr1;
@@ -28,7 +28,7 @@ public:
         generate();
     }
 
-    L_System(std::string _axiom, char _chr1, std::string _rule1, int _angle, int _gensNumber) {
+    LSystem(std::string _axiom, char _chr1, std::string _rule1, int _angle, int _gensNumber) {
         axiom = _axiom;
         chr1 = _chr1;
         chr2 = '#';
@@ -367,7 +367,7 @@ public:
         updateSFMLText();
     }
 
-    void deleteFirstOccurenceText(const std::string& pattern) {
+    void deleteFirstOccurrenceText(const std::string& pattern) {
         if (pattern.size() > text.size())
             return;
         text.replace(text.find(pattern), pattern.size(), "");
@@ -475,7 +475,7 @@ std::pair<std::string, int> menu(sf::RenderWindow& app) {
                 case sf::Event::TextEntered: {
                     if (isStringInputFromKeyboard) {
                         isStringInputFromKeyboard = false;
-                        gensNumberTextField->deleteFirstOccurenceText("(input from keyboard)");
+                        gensNumberTextField->deleteFirstOccurrenceText("(input from keyboard)");
                     }
 
                     int dec_unicode = event.text.unicode;
@@ -518,34 +518,34 @@ void fillColorFigure(sf::VertexArray& figure, sf::Color color) {
     }
 }
 
-void makeFigure(sf::VertexArray& figure, L_System* l_system, Robot* robot, const std::string& robotName, int gensNumber) {
+void makeFigure(sf::VertexArray& figure, LSystem* lSystem, Robot* robot, const std::string& robotName, int gensNumber) {
 
     robot = new Robot(robotName, 0, HEIGHT, 1, HEIGHT);
     if (robotName == "Plant") {
-        l_system = new L_System("X", 'X', 'F', "F-[[X]+X]+F[+FX]-X", "FF", 25, gensNumber);
+        lSystem = new LSystem("X", 'X', 'F', "F-[[X]+X]+F[+FX]-X", "FF", 25, gensNumber);
         robot->rotate(45);
     } else if (robotName == "Sierpinski triangle") {
-        l_system = new L_System("A", 'A', 'B', "B-A-B", "A+B+A", 60, gensNumber);
+        lSystem = new LSystem("A", 'A', 'B', "B-A-B", "A+B+A", 60, gensNumber);
     } else if (robotName == "Dragon curve") {
-        l_system = new L_System("FX", 'X', 'Y', "X+YF+", "-FX-Y", 90, gensNumber);
+        lSystem = new LSystem("FX", 'X', 'Y', "X+YF+", "-FX-Y", 90, gensNumber);
     } else if (robotName == "Koch's snowflake") {
-        l_system = new L_System("F++F++F", 'F', "F-F++F-F", 60, gensNumber);
+        lSystem = new LSystem("F++F++F", 'F', "F-F++F-F", 60, gensNumber);
     }
 
     figure.clear();
 
     RobotData newPos;
-    for (char c : l_system->getAxiom()) {
-        if (c == l_system->getChr1()) {
+    for (char c : lSystem->getAxiom()) {
+        if (c == lSystem->getChr1()) {
             figure.append(sf::Vector2f(robot->getBeginX(), robot->getBeginY()));
             robot->move();
-        } else if (c == l_system->getChr2()) {
+        } else if (c == lSystem->getChr2()) {
             figure.append(sf::Vector2f(robot->getBeginX(), robot->getBeginY()));
             robot->move();
         } else if (c == '-') {
-            robot->rotate(+l_system->getAngle());
+            robot->rotate(+lSystem->getAngle());
         } else if (c == '+') {
-            robot->rotate(-l_system->getAngle());
+            robot->rotate(-lSystem->getAngle());
         } else if (c == '[') {
             if (robotName == "Plant") {
                 robot->getMemory()->push({robot->getBeginX(), robot->getBeginY(), robot->getAngle()});
@@ -585,10 +585,10 @@ int main() {
     int gensNumber = robotNameAndGensNumber.second;
 
     Robot* robot;
-    L_System *l_system;
+    LSystem *LSystem;
     sf::VertexArray figure(sf::LinesStrip);
 
-    makeFigure(figure, l_system, robot, robotName, gensNumber);
+    makeFigure(figure, LSystem, robot, robotName, gensNumber);
 
     sf::Vector2f oldPos = sf::Vector2f(0, 0);
     bool moving = false;
@@ -600,13 +600,13 @@ int main() {
             switch (event.type) {
                 case sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::Escape) {
-                        std::pair<std::string, int> newRobotNameAndNewgensNumber = menu(app);
-                        const std::string newRobotName = newRobotNameAndNewgensNumber.first;
-                        int newGensNumber = newRobotNameAndNewgensNumber.second;
+                        std::pair<std::string, int> newRobotNameAndNewGensNumber = menu(app);
+                        const std::string newRobotName = newRobotNameAndNewGensNumber.first;
+                        int newGensNumber = newRobotNameAndNewGensNumber.second;
                         after_menu = true;
 
                         oldPos = sf::Vector2f(0, 0);
-                        makeFigure(figure, l_system, robot, newRobotName, newGensNumber);
+                        makeFigure(figure, LSystem, robot, newRobotName, newGensNumber);
                     }
 
                     break;
