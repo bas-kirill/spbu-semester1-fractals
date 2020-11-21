@@ -2,7 +2,6 @@
 #include <string>
 #include <cmath>
 #include <stack>
-#include <iostream>
 
 // system settings
 const int WIDTH = 1600, HEIGHT = 900;
@@ -156,12 +155,12 @@ private:
     std::string text;
     sf::Font font;
     float x, y;
-    float width, height;
+    int width, height;
     bool isFocus;
 
     void setFont() {font.loadFromFile("arial.ttf"); }
 public:
-    TextButton(const std::string& _text, sf::Color color, int characterSize, float _x, float _y, float _width, float _height) {
+    TextButton(const std::string& _text, sf::Color color, int characterSize, float _x, float _y, int _width, int _height) {
         setFont();
 
         text = _text;
@@ -199,9 +198,8 @@ public:
     std::string getText() const { return textButton->getString(); }
     sf::Vector2f getPosition() const { return sf::Vector2f(x, y); }
 
-    bool contains(sf::Vector2i mousePosition) {
+    bool contains(sf::Vector2i mousePosition) const {
         int mouseX = mousePosition.x, mouseY = mousePosition.y;
-//        std::cout << mouseX << ' ' << mouseY << ' ' << width << ' ' << height << std::endl;
         return (mouseX >= x and mouseX <= (x + width) and mouseY >= y and mouseY <= (y + height));
     }
     void changeColorOnHover() {
@@ -236,12 +234,12 @@ private:
     std::string text;
     sf::Font font;
     float x, y;
-    float width, height;
+    int width, height;
     bool isFocus;
 
     void setFont() {font.loadFromFile("arial.ttf"); }
 public:
-    TextField(const std::string& _text, sf::Color color, int characterSize, float _x, float _y, float _width, float _height) {
+    TextField(const std::string& _text, sf::Color color, int characterSize, float _x, float _y, int _width, int _height) {
         setFont();
 
         text = _text;
@@ -255,7 +253,7 @@ public:
         isFocus = false;
     }
 
-    TextField(const std::string& _text, float _x, float _y, float _width, float _height) {
+    TextField(const std::string& _text, float _x, float _y, int _width, int _height) {
         setFont();
 
         text = _text;
@@ -269,7 +267,7 @@ public:
         isFocus = false;
     }
 
-    TextField(const std::string& _text, float _width, float _height) {
+    TextField(const std::string& _text, int _width, int _height) {
         setFont();
 
         text = _text;
@@ -283,7 +281,7 @@ public:
         isFocus = false;
     }
 
-    TextField(int _x, int _y, float _width, float _height) {
+    TextField(float _x, float _y, int _width, int _height) {
         setFont();
 
         text = "";
@@ -310,7 +308,7 @@ public:
     size_t getTextSize() const { return text.size(); }
 
     bool contains(const sf::Vector2i& mousePosition) {
-        int mouseX = mousePosition.x, mouseY = mousePosition.y;
+        float mouseX = mousePosition.x, mouseY = mousePosition.y;
         return (mouseX >= x and mouseX <= (x + width) and mouseY >= y and mouseY <= (y + height));
     }
 
@@ -383,10 +381,10 @@ std::pair<std::string, int> menu(sf::RenderWindow& app) {
 
     app.setView(view);
 
-    // The quantity of gens in L system
-    TextField* fractalsTextField = new TextField("Fractals: ", 100, 100, 300, 50);
-    TextField* gensNumberTextField = new TextField("Generations number: (input from keyboard)", 100, 50, 30, 50);
-    TextField* warningTextField = new TextField(100 + 230, 50, 300, 50);
+    // The quantity of generations in L system
+    auto fractalsTextField = new TextField("Fractals: ", 100, 100, 300, 50);
+    auto gensNumberTextField = new TextField("Generations number: (input from keyboard)", 100, 50, 30, 50);
+    auto warningTextField = new TextField(100 + 230, 50, 300, 50);
 
     bool isStringInputFromKeyboard = true;
 
@@ -397,8 +395,8 @@ std::pair<std::string, int> menu(sf::RenderWindow& app) {
     plantTextButton = new TextButton("Plant",120, 240, 300, 50);
     curveTextButton = new TextButton("Dragon curve",120, 290, 300, 50);
 
-    int untouchableSymbols = gensNumberTextField->getTextSize() - std::string("(input from keyboard)").size();
-    std::cout << untouchableSymbols << std::endl;
+    int untouchableSymbols = gensNumberTextField->getTextSize() - (int)std::string("(input from keyboard)").size();
+
     bool isWarning = false;
     while (app.isOpen()) {
         triangleTextButton->changeColorOnHover();
@@ -422,11 +420,9 @@ std::pair<std::string, int> menu(sf::RenderWindow& app) {
                 case sf::Event::MouseButtonPressed: {
                     if (isStringInputFromKeyboard)
                         break;
-                    std::string input_number = gensNumberTextField->getText().substr(untouchableSymbols, gensNumberTextField->getTextSize() - untouchableSymbols);
-                    std::cout << input_number << std::endl;
-
+                    std::string input_number = gensNumberTextField->getText().substr(untouchableSymbols,
+                                                                                     gensNumberTextField->getTextSize() - untouchableSymbols);
                     int gensNumber = atoi(input_number.c_str());
-                    std::cout << gensNumber << std::endl;
 
                     if (triangleTextButton->haveFocus()) {
                         if (gensNumber <= 0) {
@@ -490,7 +486,7 @@ std::pair<std::string, int> menu(sf::RenderWindow& app) {
                         gensNumberTextField->addCharacter(char(dec_unicode));
                     }
 
-                    // Delete
+                    // Handle Delete button
                     if (dec_unicode == 8 and gensNumberTextField->getTextSize() > untouchableSymbols) {
                         gensNumberTextField->deleteLastCharacter();
                     }
@@ -526,18 +522,18 @@ void makeFigure(sf::VertexArray& figure, L_System* l_system, Robot* robot, const
 
     robot = new Robot(robotName, 0, HEIGHT, 1, HEIGHT);
     if (robotName == "Plant") {
-        l_system = new L_System("X", 'X', 'F', "F-[[X]+X]+F[+FX]-X", "FF", 25, gensNumber); // 9
+        l_system = new L_System("X", 'X', 'F', "F-[[X]+X]+F[+FX]-X", "FF", 25, gensNumber);
         robot->rotate(45);
     } else if (robotName == "Sierpinski triangle") {
-        l_system = new L_System("A", 'A', 'B', "B-A-B", "A+B+A", 60, gensNumber); // 10
+        l_system = new L_System("A", 'A', 'B', "B-A-B", "A+B+A", 60, gensNumber);
     } else if (robotName == "Dragon curve") {
-        l_system = new L_System("FX", 'X', 'Y', "X+YF+", "-FX-Y", 90, gensNumber); // 18
+        l_system = new L_System("FX", 'X', 'Y', "X+YF+", "-FX-Y", 90, gensNumber);
     } else if (robotName == "Koch's snowflake") {
-        l_system = new L_System("F++F++F", 'F', "F-F++F-F", 60, gensNumber); // 5
+        l_system = new L_System("F++F++F", 'F', "F-F++F-F", 60, gensNumber);
     }
 
     figure.clear();
-    std::cout << "HELLO" << std::endl;
+
     RobotData newPos;
     for (char c : l_system->getAxiom()) {
         if (c == l_system->getChr1()) {
@@ -565,7 +561,7 @@ void makeFigure(sf::VertexArray& figure, L_System* l_system, Robot* robot, const
         }
     }
 
-    // Adding last vertex
+    // Add last vertex
     figure.append(sf::Vector2f(robot->getBeginX(), robot->getBeginY()));
 
     if (robotName == "Dragon curve") {
@@ -592,9 +588,7 @@ int main() {
     L_System *l_system;
     sf::VertexArray figure(sf::LinesStrip);
 
-
     makeFigure(figure, l_system, robot, robotName, gensNumber);
-
 
     sf::Vector2f oldPos = sf::Vector2f(0, 0);
     bool moving = false;
@@ -603,9 +597,6 @@ int main() {
     while(app.isOpen()){
         sf::Event event;
         while(app.pollEvent(event)) {
-            sf::Vector2i mousePos = sf::Mouse::getPosition();
-//            std::cout << mousePos.x << ' ' << mousePos.y << std::endl;
-
             switch (event.type) {
                 case sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::Escape) {
@@ -615,7 +606,6 @@ int main() {
                         after_menu = true;
 
                         oldPos = sf::Vector2f(0, 0);
-//                        std::cout << newRobotName << std::endl;
                         makeFigure(figure, l_system, robot, newRobotName, newGensNumber);
                     }
 
