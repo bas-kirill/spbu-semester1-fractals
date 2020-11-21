@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/n2k/CLionProjects/spbu-semester1-fractals/main.cpp
+SFML/Graphics.hpp
+-
+string
+-
+cmath
+-
+stack
+-
+iostream
+-
+

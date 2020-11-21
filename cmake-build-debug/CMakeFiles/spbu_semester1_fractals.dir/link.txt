@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++17 -g   CMakeFiles/spbu_semester1_fractals.dir/main.cpp.o  -o spbu_semester1_fractals  /usr/lib/x86_64-linux-gnu/libsfml-system.so /usr/lib/x86_64-linux-gnu/libsfml-window.so /usr/lib/x86_64-linux-gnu/libsfml-graphics.so /usr/lib/x86_64-linux-gnu/libsfml-network.so /usr/lib/x86_64-linux-gnu/libsfml-audio.so 

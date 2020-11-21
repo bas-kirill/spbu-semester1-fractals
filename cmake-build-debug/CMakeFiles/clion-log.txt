@@ -1,0 +1,5 @@
+/snap/clion/129/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/n2k/CLionProjects/spbu-semester1-fractals
+-- Found SFML .. in /usr/include
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/n2k/CLionProjects/spbu-semester1-fractals/cmake-build-debug

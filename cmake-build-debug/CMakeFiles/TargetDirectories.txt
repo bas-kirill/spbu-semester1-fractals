@@ -1,0 +1,3 @@
+/home/n2k/CLionProjects/spbu-semester1-fractals/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/n2k/CLionProjects/spbu-semester1-fractals/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/n2k/CLionProjects/spbu-semester1-fractals/cmake-build-debug/CMakeFiles/spbu-semester1-fractals.dir
