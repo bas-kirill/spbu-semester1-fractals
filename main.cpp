@@ -577,115 +577,115 @@ void makeFigure(sf::VertexArray& figure, LSystem* lSystem, Robot* robot, const s
 }
 
 int main() {
-    sf::RenderWindow app(sf::VideoMode(WIDTH, HEIGHT,64),"Fractal");
-    sf::View view = app.getDefaultView();
-
-    std::pair<std::string, int> robotNameAndGensNumber = menu(app);
-    std::string robotName = robotNameAndGensNumber.first;
-    int gensNumber = robotNameAndGensNumber.second;
+//    sf::RenderWindow app(sf::VideoMode(WIDTH, HEIGHT,64),"Fractal");
+//    sf::View view = app.getDefaultView();
+//
+//    std::pair<std::string, int> robotNameAndGensNumber = menu(app);
+//    std::string robotName = robotNameAndGensNumber.first;
+//    int gensNumber = robotNameAndGensNumber.second;
 
     Robot* robot;
     LSystem *LSystem;
     sf::VertexArray figure(sf::LinesStrip);
 
-    makeFigure(figure, LSystem, robot, robotName, gensNumber);
+    makeFigure(figure, LSystem, robot, "Plant", 10);
 
-    sf::Texture loupeTexture;
-    loupeTexture.loadFromFile("./img/loupe.png");
-    sf::Sprite loupeSprite;
-    loupeSprite.setTexture(loupeTexture);
-    loupeSprite.setPosition(WIDTH - 200, 100);
-
-    sf::CircleShape circle(50);
-    circle.setFillColor(sf::Color(100, 250, 50));
-
-    sf::Vector2f oldPos = sf::Vector2f(0, 0);
-    bool moving = false;
-    bool after_menu = false;
-    float zoom = 1;
-    bool isLoupe = false;
-    while(app.isOpen()){
-        sf::Event event;
-        while(app.pollEvent(event)) {
-            switch (event.type) {
-                case sf::Event::KeyPressed:
-                    if (event.key.code == sf::Keyboard::Escape) {
-                        std::pair<std::string, int> newRobotNameAndNewGensNumber = menu(app);
-                        const std::string newRobotName = newRobotNameAndNewGensNumber.first;
-                        int newGensNumber = newRobotNameAndNewGensNumber.second;
-                        after_menu = true;
-
-                        oldPos = sf::Vector2f(0, 0);
-                        makeFigure(figure, LSystem, robot, newRobotName, newGensNumber);
-                    }
-
-                    break;
-                case sf::Event::Closed:
-                    app.close();
-                    break;
-                case sf::Event::MouseButtonPressed:
-                    moving = true;
-                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
-                    break;
-                case sf::Event::MouseButtonReleased:
-                    moving = false;
-                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
-                    break;
-                case sf::Event::MouseMoved: {
-                    if (!moving)
-                        break;
-
-                    sf::Vector2f newPos = app.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
-
-                    sf::Vector2f deltaPos = newPos - oldPos;
-
-
-                    if (after_menu) {
-                        view.setCenter(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
-                        after_menu = false;
-                    } else {
-                        view.setCenter(view.getCenter() - deltaPos);
-                    }
-
-                    app.setView(view);
-
-                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
-                    break;
-                } case sf::Event::MouseWheelScrolled: {
-                    if (moving)
-                        break;
-
-                    if (event.mouseWheelScroll.delta >= 1) {
-                        zoom = std::max(0.5f, zoom - 0.1f);
-
-                    } else if (event.mouseWheelScroll.delta <= -1) {
-                        zoom = std::min(2.f, zoom + 0.1f);
-                    }
-
-                    isLoupe = true;
-
-                    view.setSize(app.getDefaultView().getSize());
-                    view.zoom(zoom);
-
-                    app.setView(view);
-
-
-                    break;
-                }
-           }
-        }
-
-        app.clear(sf::Color::Black);
-
-        app.draw(figure);
-
-        // TO DO
-        if (isLoupe) {
-            isLoupe = false;
-            app.draw(loupeSprite);
-        }
-        app.display();
-    }
+//    sf::Texture loupeTexture;
+//    loupeTexture.loadFromFile("./img/loupe.png");
+//    sf::Sprite loupeSprite;
+//    loupeSprite.setTexture(loupeTexture);
+//    loupeSprite.setPosition(WIDTH - 200, 100);
+//
+//    sf::CircleShape circle(50);
+//    circle.setFillColor(sf::Color(100, 250, 50));
+//
+//    sf::Vector2f oldPos = sf::Vector2f(0, 0);
+//    bool moving = false;
+//    bool after_menu = false;
+//    float zoom = 1;
+//    bool isLoupe = false;
+//    while(app.isOpen()){
+//        sf::Event event;
+//        while(app.pollEvent(event)) {
+//            switch (event.type) {
+//                case sf::Event::KeyPressed:
+//                    if (event.key.code == sf::Keyboard::Escape) {
+//                        std::pair<std::string, int> newRobotNameAndNewGensNumber = menu(app);
+//                        const std::string newRobotName = newRobotNameAndNewGensNumber.first;
+//                        int newGensNumber = newRobotNameAndNewGensNumber.second;
+//                        after_menu = true;
+//
+//                        oldPos = sf::Vector2f(0, 0);
+//                        makeFigure(figure, LSystem, robot, newRobotName, newGensNumber);
+//                    }
+//
+//                    break;
+//                case sf::Event::Closed:
+//                    app.close();
+//                    break;
+//                case sf::Event::MouseButtonPressed:
+//                    moving = true;
+//                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+//                    break;
+//                case sf::Event::MouseButtonReleased:
+//                    moving = false;
+//                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+//                    break;
+//                case sf::Event::MouseMoved: {
+//                    if (!moving)
+//                        break;
+//
+//                    sf::Vector2f newPos = app.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+//
+//                    sf::Vector2f deltaPos = newPos - oldPos;
+//
+//
+//                    if (after_menu) {
+//                        view.setCenter(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
+//                        after_menu = false;
+//                    } else {
+//                        view.setCenter(view.getCenter() - deltaPos);
+//                    }
+//
+//                    app.setView(view);
+//
+//                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+//                    break;
+//                } case sf::Event::MouseWheelScrolled: {
+//                    if (moving)
+//                        break;
+//
+//                    if (event.mouseWheelScroll.delta >= 1) {
+//                        zoom = std::max(0.5f, zoom - 0.1f);
+//
+//                    } else if (event.mouseWheelScroll.delta <= -1) {
+//                        zoom = std::min(2.f, zoom + 0.1f);
+//                    }
+//
+//                    isLoupe = true;
+//
+//                    view.setSize(app.getDefaultView().getSize());
+//                    view.zoom(zoom);
+//
+//                    app.setView(view);
+//
+//
+//                    break;
+//                }
+//           }
+//        }
+//
+//        app.clear(sf::Color::Black);
+//
+//        app.draw(figure);
+//
+//        // TO DO
+//        if (isLoupe) {
+//            isLoupe = false;
+//            app.draw(loupeSprite);
+//        }
+//        app.display();
+//    }
 
     return 0;
 }
