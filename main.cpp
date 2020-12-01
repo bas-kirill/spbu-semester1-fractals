@@ -588,7 +588,7 @@ int main() {
     LSystem *LSystem;
     sf::VertexArray figure(sf::LinesStrip);
 
-    makeFigure(figure, LSystem, robot, "Sierpinski triangle", 10);
+    makeFigure(figure, LSystem, robot, "Sierpinski triangle", 8);
 
 //    sf::Texture loupeTexture;
 //    loupeTexture.loadFromFile("./img/loupe.png");
@@ -624,50 +624,50 @@ int main() {
                     app.close();
                     break;
                 case sf::Event::MouseButtonPressed:
-                    moving = true;
-                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+//                    moving = true;
+//                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
                     break;
                 case sf::Event::MouseButtonReleased:
-                    moving = false;
-                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+//                    moving = false;
+//                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
                     break;
                 case sf::Event::MouseMoved: {
-                    if (!moving)
-                        break;
-
-                    sf::Vector2f newPos = app.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
-
-                    sf::Vector2f deltaPos = newPos - oldPos;
-
-
-                    if (after_menu) {
-                        view.setCenter(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
-                        after_menu = false;
-                    } else {
-                        view.setCenter(view.getCenter() - deltaPos);
-                    }
-
-                    app.setView(view);
-
-                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+//                    if (!moving)
+//                        break;
+//
+//                    sf::Vector2f newPos = app.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+//
+//                    sf::Vector2f deltaPos = newPos - oldPos;
+//
+//
+//                    if (after_menu) {
+//                        view.setCenter(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
+//                        after_menu = false;
+//                    } else {
+//                        view.setCenter(view.getCenter() - deltaPos);
+//                    }
+//
+//                    app.setView(view);
+//
+//                    oldPos = app.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
                     break;
                 } case sf::Event::MouseWheelScrolled: {
-                    if (moving)
-                        break;
-
-                    if (event.mouseWheelScroll.delta >= 1) {
-                        zoom = std::max(0.5f, zoom - 0.1f);
-
-                    } else if (event.mouseWheelScroll.delta <= -1) {
-                        zoom = std::min(2.f, zoom + 0.1f);
-                    }
-
-                    isLoupe = true;
-
-                    view.setSize(app.getDefaultView().getSize());
-                    view.zoom(zoom);
-
-                    app.setView(view);
+//                    if (moving)
+//                        break;
+//
+//                    if (event.mouseWheelScroll.delta >= 1) {
+//                        zoom = std::max(0.5f, zoom - 0.1f);
+//
+//                    } else if (event.mouseWheelScroll.delta <= -1) {
+//                        zoom = std::min(2.f, zoom + 0.1f);
+//                    }
+//
+//                    isLoupe = true;
+//
+//                    view.setSize(app.getDefaultView().getSize());
+//                    view.zoom(zoom);
+//
+//                    app.setView(view);
                     break;
                 }
            }
